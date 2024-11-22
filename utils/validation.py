@@ -6,6 +6,11 @@ def validate_number_value(value):
         raise TypeError("Value must be numbers.")
 
 
+def validate_string_value(value):
+    if not isinstance(value, str):
+        raise TypeError("Value must be string.")
+
+
 def validate_point(point: Tuple[float, float, float] | List[float, float, float]):
     if not isinstance(point, (tuple, list)):
         raise TypeError("First argument must be a point tuple (x, y)")

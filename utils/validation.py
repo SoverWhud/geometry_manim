@@ -11,7 +11,7 @@ def validate_string_value(value):
         raise TypeError("Value must be string.")
 
 
-def validate_point(point: Tuple[float, float, float] | List[float, float, float]):
+def validate_point(point):
     if not isinstance(point, (tuple, list)):
         raise TypeError("First argument must be a point tuple (x, y)")
     if len(point) != 3:

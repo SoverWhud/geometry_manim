@@ -16,8 +16,6 @@ class TestScalingManager(unittest.TestCase):
         config.frame_width = 800
         config.frame_height = 600
 
-        self.mock_scene = MagicMock()
-
     def tearDown(self):
         """Restore original Manim configuration after tests"""
         config.frame_width = self.original_frame_width
@@ -25,15 +23,14 @@ class TestScalingManager(unittest.TestCase):
 
     def test_init_with_valid_scene(self):
         """Test initialization of ScalingManager"""
-        scaling_manager = utils.ScalingManager(self.mock_scene)
-        self.assertEqual(scaling_manager.scene, self.mock_scene)
+        scaling_manager = utils.ScalingManager(config.frame_width, config.frame_height)
         self.assertEqual(scaling_manager.frame_width, 800)
         self.assertEqual(scaling_manager.frame_height, 600)
-        self.assertEqual(scaling_manager.min_dimension, 600)
+        self.assertEqual(scaling_manager.scale, 600 / 8)
 
     def test_get_scaled_size(self):
         """Test scaling size relative to window size"""
-        scaling_manager = utils.ScalingManager(self.mock_scene)
+        scaling_manager = utils.ScalingManager(config.frame_width, config.frame_height)
 
         base_size = 2.0
         expected_scaled_size = base_size * (600 / 8)
@@ -43,7 +40,7 @@ class TestScalingManager(unittest.TestCase):
 
     def test_get_scaled_size_with_different_base_sizes(self):
         """Test scaling with various base sizes"""
-        scaling_manager = utils.ScalingManager(self.mock_scene)
+        scaling_manager = utils.ScalingManager(config.frame_width, config.frame_height)
 
         test_cases = [
             (1.0, 1.0 * (600 / 8)),

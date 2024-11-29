@@ -1,4 +1,5 @@
 from manim import *
+from typing import Tuple, Any
 
 
 class ScalingManager:
@@ -6,29 +7,38 @@ class ScalingManager:
     Manages scaling of scene elements to adapt to rendering window dimensions.
 
     Attributes:
-        scene (Scene): Manim scene for visualization
         frame_width (int): Frame width from Manim configuration
         frame_height (int): Frame height from Manim configuration
-        min_dimension (int): Minimum dimension for correct scaling
+        scale (int): Scale factor
     """
 
-    def __init__(self, scene: Scene):
+    def __init__(self, frame_width: float, frame_height: float):
         """
         Initializes the scaling manager.
 
         Args:
-            scene (Scene): Manim scene for which scaling is performed
+            frame_width (int): Frame width from Manim configuration
+            frame_height (int): Frame height from Manim configuration
 
         Remarks:
             Uses global Manim configuration to determine frame dimensions
         """
-        self.scene = scene
         # Get the dimensions of the rendering area
-        self.frame_width = config.frame_width
-        self.frame_height = config.frame_height
+        self.frame_width = frame_width
+        self.frame_height = frame_height
+
         # Determine the minimum size for scaling
-        self.min_dimension = min(self.frame_width, self.frame_height)
+        self.scale = min(self.frame_width, self.frame_height) / 8 # 8 is a base divisor for convenient scaling
+
 
     def get_scaled_size(self, base_size: float) -> float:
         """Scales the size relative to the window size"""
-        return base_size * (self.min_dimension / 8)  # 8 - это базовый делитель для удобного масштаба
+        return base_size * self.scale
+
+    def get_scaled_point(self, base_point: Tuple[float | Any, ...]):
+        """Scales the size relative to the window size"""
+        return tuple(p * self.scale for p in base_point)
+
+    def get_font_size(self, base_size: int = 36) -> int:
+        """Calculates the font size relative to the window size"""
+        return int(base_size * self.scale)
